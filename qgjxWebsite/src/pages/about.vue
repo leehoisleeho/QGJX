@@ -1,37 +1,37 @@
 <script setup>
 import Header from "../components/Header.vue";
-import api from '/API/api.js'
-import {onMounted, ref} from "vue";
+import api from "/API/api.js";
+import { onMounted, ref } from "vue";
 
-const about = ref('')
+const about = ref("");
 onMounted(() => {
-  api.getAbout().then(res => {
-    about.value = res.data[0]
-  })
-})
+  api.getAbout().then((res) => {
+    about.value = res.data[0];
+  });
+});
 const open_map = () => {
-  const coordinate = about.value.coordinate.split(',')
-  console.log(coordinate)
+  const coordinate = about.value.coordinate.split(",");
+  console.log(coordinate);
   // 103.389729,23.357675
   let latitude = coordinate[0]; // 纬度
   let longitude = coordinate[1]; // 经度
   // 构建腾讯地图的URL
-  let mapUrl = `https://apis.map.qq.com/uri/v1/marker?marker=coord:${longitude},${latitude};title:我的位置;`
-  window.open(mapUrl, '_blank');
-}
+  let mapUrl = `https://apis.map.qq.com/uri/v1/marker?marker=coord:${longitude},${latitude};title:我的位置;`;
+  window.open(mapUrl, "_blank");
+};
 </script>
 
 <template>
   <Header></Header>
   <div class="block"></div>
   <div class="container">
-    <img :src="about.src_cover">
+    <img :src="about.src_cover" />
     <div class="aboutInfo">
       <h2>关于我们</h2>
       <p v-html="about.content"></p>
     </div>
     <div class="aboutInfo">
-      <h2>联系方式 </h2>
+      <h2>联系方式</h2>
       <p>{{ about.name }}</p>
       <p>
         <span>联系电话 </span>
@@ -47,15 +47,15 @@ const open_map = () => {
       </p>
       <div class="map">
         <div @click="open_map">
-          <img src="/src/assets/images/mapIcon.jpg">
+          <img src="/src/assets/images/mapIcon.jpg" />
           <p>点击查看公司位置</p>
         </div>
         <div>
-          <img :src="about.src_map">
+          <img :src="about.src_map" />
           <p>扫描获取公司位置</p>
         </div>
         <div>
-          <img :src="about.src_wx">
+          <img :src="about.src_wx" />
           <p>扫描联系我们</p>
         </div>
       </div>

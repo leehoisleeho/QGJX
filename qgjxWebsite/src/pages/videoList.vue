@@ -1,38 +1,40 @@
 <script setup>
 import Header from "../components/Header.vue";
-import 'vue3-video-play/dist/style.css'
-import {videoPlay} from 'vue3-video-play'
-import {onMounted, ref} from "vue";
-import api from '/API/api.js'
+import "vue3-video-play/dist/style.css";
+import { videoPlay } from "vue3-video-play";
+import { onMounted, ref } from "vue";
+import api from "/API/api.js";
 
-const list = ref([])
+const list = ref([]);
 onMounted(() => {
   window.scrollTo(0, 0);
-  api.getVideo().then(res => {
-    console.log(res)
-    list.value = res.data
-  })
-})
+  api.getVideo().then((res) => {
+    console.log(res);
+    list.value = res.data;
+  });
+});
 const videoViews = (item) => {
-  api.editVideo({
-    id: item.id,
-    views: Number(item.views) + 1
-  }).then(res => {
-    console.log(res)
-  })
-}
+  api
+    .editVideo({
+      id: item.id,
+      views: Number(item.views) + 1,
+    })
+    .then((res) => {
+      console.log(res);
+    });
+};
 </script>
 
 <template>
   <Header></Header>
   <div class="container">
     <div class="imgBox">
-      <img src="/src/assets/images/videoIcon.png">
+      <img src="/src/assets/images/videoIcon.png" />
     </div>
     <ul class="videoList">
       <li class="item" v-for="item in list" @click="videoViews(item)">
         <videoPlay width="710px" height="403px" :src="item.src"></videoPlay>
-        <p>视频名称</p>
+        <p>{{ item.title }}</p>
       </li>
     </ul>
   </div>

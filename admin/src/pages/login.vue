@@ -1,37 +1,38 @@
 <script setup>
-import {ref, onBeforeUnmount} from "vue";
-import config from "../config.js";
-import {NInput, NButton, NIcon, useMessage} from 'naive-ui'
-import {PersonSharp, LockClosed} from '@vicons/ionicons5'
-import {useLoadingStore} from '/store/index.js'
+import { ref, onBeforeUnmount } from 'vue'
+import config from '../config.js'
+import { NInput, NButton, NIcon, useMessage } from 'naive-ui'
+import { PersonSharp, LockClosed } from '@vicons/ionicons5'
+import { useLoadingStore } from '/store/index.js'
 
 const store = useLoadingStore()
 import api from '/API/api.js'
-import {useRouter} from 'vue-router';
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
+const router = useRouter()
 const username = ref('')
 const password = ref('')
 
 const message = useMessage()
 
-
 const toIndex = () => {
   store.set(true)
-  api.login({
-    username: username.value,
-    password: password.value
-  }).then(res => {
-    if (res.code === 0) {
-      sessionStorage.setItem('token',res.token)
-      router.push('/index')
-      message.success(res.msg)
-      store.set(false)
-    } else if (res.code === 1) {
-      message.error(res.msg)
-      store.set(false)
-    }
-  })
+  api
+    .login({
+      username: username.value,
+      password: password.value,
+    })
+    .then((res) => {
+      if (res.code === 0) {
+        sessionStorage.setItem('token', res.token)
+        router.push('/index')
+        message.success(res.msg)
+        store.set(false)
+      } else if (res.code === 1) {
+        message.error(res.msg)
+        store.set(false)
+      }
+    })
 }
 </script>
 
@@ -40,26 +41,31 @@ const toIndex = () => {
     <div class="loginBox">
       <div class="loginBox_1">
         <div class="imgBox">
-          <img src="../assets/img/logo.png">
+          <img src="../assets/img/logo.png" />
         </div>
         <h1>{{ config.system_name }}</h1>
         <div class="version">
-          <img src="../assets/img/versionIcon.png">
+          <img src="../assets/img/versionIcon.png" />
           <p>版本号 v 0.0.2</p>
         </div>
         <div class="foot">
-          {{ config.footer }}
+          <p>{{ config.footer }}</p>
         </div>
       </div>
       <div class="loginBox_2">
         <h2>登录 Login</h2>
         <n-input placeholder="账号" style="margin-top: 40px" v-model:value="username">
           <template #prefix>
-            <n-icon :component="PersonSharp"/>
+            <n-icon :component="PersonSharp" />
           </template>
         </n-input>
-        <n-input placeholder="密码" type="password" show-password-on="mousedown" style="margin-top: 20px"
-                 v-model:value="password" @keydown.enter="toIndex">
+        <n-input
+          placeholder="密码"
+          type="password"
+          show-password-on="mousedown"
+          style="margin-top: 20px"
+          v-model:value="password"
+          @keydown.enter="toIndex">
           <template #prefix>
             <n-icon :component="LockClosed" />
           </template>
@@ -119,11 +125,14 @@ const toIndex = () => {
   width: 100%;
   text-align: center;
 }
-
+.foot > p {
+  text-align: center;
+  padding: 0 20px;
+  font-size: 12px;
+}
 .loginBox_1 > .foot {
   position: absolute;
   bottom: 10px;
-  font-size: 12px;
   color: #999999;
 }
 
@@ -150,7 +159,7 @@ const toIndex = () => {
   min-width: 1200px;
   display: flex;
   justify-content: center;
-  background: url("../assets/img/bg.png");
+  background: url('../assets/img/bg.png');
 }
 
 .loginBox {
