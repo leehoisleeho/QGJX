@@ -1,25 +1,16 @@
 <script setup>
-import {onMounted, ref} from 'vue'
-import Editor from "../components/Editor.vue"
-import ImgOne from "../components/ImgOne.vue";
-import {
-  NButton,
-  NUpload,
-  NDivider,
-  NPagination,
-  NPopconfirm,
-  NDrawer,
-  NDrawerContent,
-  NInput,
-  useMessage
-} from 'naive-ui'
+import { onMounted, ref } from 'vue'
+import Editor from '../components/Editor.vue'
+import ImgOne from '../components/ImgOne.vue'
+import { NButton, NInput } from 'naive-ui'
 import api from '/API/api.js'
 
 const isShow = ref(false)
 const onlyRead = ref(true)
 
 onMounted(() => {
-  api.getAbout().then(res => {
+  api.getAbout().then((res) => {
+    console.log(res)
     isShow.value = true
     let data = res.data[0]
     content.value = data.content
@@ -51,20 +42,22 @@ const editBtn = () => {
   onlyRead.value = false
 }
 const submit = () => {
-  api.editAbout({
-    id: 1,
-    content: content.value,
-    src_cover: src_cover.value,
-    address: address.value,
-    name: name.value,
-    phone: phone.value,
-    coordinate: coordinate.value,
-    src_map: src_map.value,
-    src_wx: src_wx.value,
-    email:email.value
-  }).then(res => {
-    onlyRead.value = true
-  })
+  api
+    .editAbout({
+      id: 1,
+      content: content.value,
+      src_cover: src_cover.value,
+      address: address.value,
+      name: name.value,
+      phone: phone.value,
+      coordinate: coordinate.value,
+      src_map: src_map.value,
+      src_wx: src_wx.value,
+      email: email.value,
+    })
+    .then((res) => {
+      onlyRead.value = true
+    })
 }
 
 // 富文本自定义事件
@@ -76,15 +69,15 @@ const xxx = ref(0)
 const inputImg = (e) => {
   xxx.value = e
   const imgInput = document.getElementById('imgInput')
-  imgInput.removeEventListener('change', hand);
+  imgInput.removeEventListener('change', hand)
   imgInput.click()
   imgInput.addEventListener('change', hand)
 }
-const hand = ()=>{
+const hand = () => {
   const imgInput = document.getElementById('imgInput')
-  api.update(imgInput.files).then(res => {
+  api.update(imgInput.files).then((res) => {
     const newFile = res.data.full_url
-    console.log('当前的e'+ xxx.value)
+    console.log('当前的e' + xxx.value)
     if (xxx.value === 1) {
       console.log('我在改背景')
       src_cover.value = newFile
@@ -96,7 +89,7 @@ const hand = ()=>{
       src_wx.value = newFile
     }
     // 清空文件输入框的值
-    inputImg.value = '';
+    inputImg.value = ''
   })
 }
 </script>
@@ -112,39 +105,39 @@ const hand = ()=>{
       <div class="imgBox">
         <div class="imgBoxItem">
           <p>封面</p>
-          <ImgOne v-model:src="src_cover" :imgSize="[200,112]" :onlyRead="onlyRead"></ImgOne>
-<!--          <img :src="src_cover" alt="" width="200" height="112">-->
-<!--          <div class="imgUpdate">-->
-<!--            <input type="file" id="imgInput">-->
-<!--            <n-button type="primary" v-if="src_cover===''">上传图片</n-button>-->
-<!--            <n-button type="warning" v-if="src_cover!==''" @click="inputImg(1)">更改图片</n-button>-->
-<!--          </div>-->
+          <ImgOne v-model:src="src_cover" :imgSize="[200, 112]" :onlyRead="onlyRead"></ImgOne>
+          <!--          <img :src="src_cover" alt="" width="200" height="112">-->
+          <!--          <div class="imgUpdate">-->
+          <!--            <input type="file" id="imgInput">-->
+          <!--            <n-button type="primary" v-if="src_cover===''">上传图片</n-button>-->
+          <!--            <n-button type="warning" v-if="src_cover!==''" @click="inputImg(1)">更改图片</n-button>-->
+          <!--          </div>-->
         </div>
         <div class="imgBoxItem">
           <p>地图</p>
           <ImgOne v-model:src="src_map" :onlyRead="onlyRead"></ImgOne>
-<!--          <img :src="src_map" alt="" width="112" height="112">-->
+          <!--          <img :src="src_map" alt="" width="112" height="112">-->
 
-<!--          <div class="imgUpdate">-->
-<!--            <input type="file" id="imgInput">-->
-<!--            <n-button type="primary" v-if="src_map===''">上传图片</n-button>-->
-<!--            <n-button type="warning" v-if="src_map!==''" @click="inputImg(2)">更改图片</n-button>-->
-<!--          </div>-->
+          <!--          <div class="imgUpdate">-->
+          <!--            <input type="file" id="imgInput">-->
+          <!--            <n-button type="primary" v-if="src_map===''">上传图片</n-button>-->
+          <!--            <n-button type="warning" v-if="src_map!==''" @click="inputImg(2)">更改图片</n-button>-->
+          <!--          </div>-->
         </div>
         <div class="imgBoxItem">
           <p>联系我们</p>
           <ImgOne v-model:src="src_wx" :onlyRead="onlyRead"></ImgOne>
-<!--          <img :src="src_wx" alt="" width="112" height="112">-->
-<!--          <div class="imgUpdate">-->
-<!--            <input type="file" id="imgInput">-->
-<!--            <n-button type="primary" v-if="src_wx===''">上传图片</n-button>-->
-<!--            <n-button type="warning" v-if="src_wx!==''" @click="inputImg(3)">更改图片</n-button>-->
-<!--          </div>-->
+          <!--          <img :src="src_wx" alt="" width="112" height="112">-->
+          <!--          <div class="imgUpdate">-->
+          <!--            <input type="file" id="imgInput">-->
+          <!--            <n-button type="primary" v-if="src_wx===''">上传图片</n-button>-->
+          <!--            <n-button type="warning" v-if="src_wx!==''" @click="inputImg(3)">更改图片</n-button>-->
+          <!--          </div>-->
         </div>
       </div>
       <div v-html="content" class="editInfo" v-show="onlyRead"></div>
       <div class="editBox">
-        <Editor @change="EditorChange" :content=content v-if="!onlyRead"></Editor>
+        <Editor @change="EditorChange" :content="content" v-if="!onlyRead"></Editor>
       </div>
       <div class="inputBox">
         <p>联系方式</p>
@@ -159,11 +152,12 @@ const hand = ()=>{
 </template>
 
 <style scoped>
-.editInfo{
+.editInfo {
   padding: 10px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   border-radius: 10px;
   height: 680px;
+  overflow-y: auto;
 }
 #imgInput {
   width: 0;

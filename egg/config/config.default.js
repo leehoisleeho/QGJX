@@ -30,7 +30,7 @@ module.exports = (appInfo) => {
       host: "119.45.199.52",
       port: "3306",
       user: "admin",
-      password: "123456",
+      password: "YLspmyDS7z2bnWcD",
       database: "qgjx",
     },
     app: true,
@@ -44,15 +44,14 @@ module.exports = (appInfo) => {
   // 服务端口配置
   config.cluster = {
     listen: {
-      path: '',
+      path: "",
       port: 8002,
-      hostname: '127.0.0.1',
-    }
+    },
   };
   // 配置上传图片
   config.multipart = {
     mode: "file",
-    whitelist: ['.jpg','.png','.jpeg','.mp4']
+    whitelist: [".jpg", ".png", ".jpeg", ".mp4"],
   };
   return {
     ...config,

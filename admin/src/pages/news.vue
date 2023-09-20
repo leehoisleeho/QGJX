@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref} from 'vue'
+import { onMounted, ref } from 'vue'
 import {
   NButton,
   NDivider,
@@ -9,10 +9,10 @@ import {
   NDrawerContent,
   NInput,
   useMessage,
-  NSwitch
+  NSwitch,
 } from 'naive-ui'
-import ImgOne from "../components/ImgOne.vue";
-import Editor from "../components/Editor.vue"
+import ImgOne from '../components/ImgOne.vue'
+import Editor from '../components/Editor.vue'
 import api from '/API/api.js'
 import verifyData from '/src/util/verifyData.js'
 import timestamp from '/src/util/date.js'
@@ -30,8 +30,8 @@ onMounted(() => {
 /**
  * 抽屉
  */
-const active = ref(false);
-const placement = ref("right");
+const active = ref(false)
+const placement = ref('right')
 /**
  * 富文本编辑器
  */
@@ -45,32 +45,35 @@ const onSuccess = (val) => {
 }
 // 打开抽屉
 const activate = (place) => {
-  active.value = true;
+  active.value = true
   //重置
   isEdit.value = false
   img.value = ''
   content.value = ''
   title.value = ''
-  placement.value = place;
-};
+  placement.value = place
+}
 // 新增新闻的方法
 const addNews = () => {
-  api.addNews({
-    title: title.value,
-    img: img.value,
-    content: content.value,
-    createtime: timestamp()
-  }).then(res => {
-    message.success('添加成功')
-    getNews()
-    active.value = false
-  })
+  api
+    .addNews({
+      title: title.value,
+      img: img.value,
+      content: content.value,
+      createtime: timestamp(),
+    })
+    .then((res) => {
+      console.log(res)
+      message.success('添加成功')
+      getNews()
+      active.value = false
+    })
 }
 // 获取新闻
 const getNews = () => {
-  api.getNews().then(res => {
+  api.getNews().then((res) => {
     let arr = res.data
-    arr.forEach(item => {
+    arr.forEach((item) => {
       if (item.isbanner === 1) {
         item.disabled = true
         return
@@ -97,7 +100,7 @@ const add = () => {
     {
       data: content.value,
       msg: '内容不能为空',
-    }
+    },
   ])
   if (msg === 0) {
     addNews()
@@ -106,18 +109,18 @@ const add = () => {
   }
 }
 const Oncancel = () => {
-  active.value = false;
+  active.value = false
 }
 // 删除
 const confirmDelete = (id) => {
-  api.delNews({id}).then(res => {
+  api.delNews({ id }).then((res) => {
     message.success('删除成功')
     getNews()
   })
 }
 // 编辑
 const isEdit = ref(false)
-const id = ref("")
+const id = ref('')
 const editBut = (item) => {
   id.value = item.id
   isEdit.value = true
@@ -127,18 +130,19 @@ const editBut = (item) => {
   active.value = true
 }
 const editNews = () => {
-  api.editNews({
-    id: id.value,
-    title: title.value,
-    img: img.value,
-    content: content.value,
-  }).then(res => {
-    isEdit.value = false
-    active.value = false
-    getNews()
-  })
+  api
+    .editNews({
+      id: id.value,
+      title: title.value,
+      img: img.value,
+      content: content.value,
+    })
+    .then((res) => {
+      isEdit.value = false
+      active.value = false
+      getNews()
+    })
 }
-
 </script>
 
 <template>
@@ -146,22 +150,16 @@ const editNews = () => {
     <n-drawer v-model:show="active" :width="800" :placement="placement">
       <n-drawer-content title="添加新闻">
         <div class="formBox">
-          <div class="title">
-            新闻标题
-          </div>
-          <n-input v-model:value="title" type="text" placeholder="请输入新闻标题"/>
+          <div class="title">新闻标题</div>
+          <n-input v-model:value="title" type="text" placeholder="请输入新闻标题" />
         </div>
         <div class="formBox">
-          <div class="title">
-            上传新闻封面
-          </div>
+          <div class="title">上传新闻封面</div>
           <ImgOne v-model:src="img"></ImgOne>
         </div>
         <div class="formBox">
-          <div class="title">
-            新闻内容
-          </div>
-          <Editor @change="EditorChange" :content=content></Editor>
+          <div class="title">新闻内容</div>
+          <Editor @change="EditorChange" :content="content"></Editor>
         </div>
         <template #footer>
           <n-button @click="add" type="primary">确认</n-button>
@@ -181,7 +179,7 @@ const editNews = () => {
         <li>是否是轮播图</li>
         <li>操作</li>
       </ul>
-      <n-divider title-placement="mid" style="color: #999;font-size: 13px" v-show="list.length === 0">
+      <n-divider title-placement="mid" style="color: #999; font-size: 13px" v-show="list.length === 0">
         没有数据
       </n-divider>
       <TransitionGroup name="list" tag="div">
@@ -191,16 +189,12 @@ const editNews = () => {
           <li>{{ item.createtime }}</li>
           <li>{{ item.views }}</li>
           <li>
-            <span style="color: red" v-if="item.isbanner===1">是</span>
-            <span v-if="item.isbanner===0">否</span>
+            <span style="color: red" v-if="item.isbanner === 1">是</span>
+            <span v-if="item.isbanner === 0">否</span>
           </li>
           <li>
             <n-button type="info" size="small" @click="editBut(item)">查看</n-button>
-            <n-popconfirm
-                @positive-click="confirmDelete(item.id)"
-                positive-text="确认"
-                negative-text="取消"
-            >
+            <n-popconfirm @positive-click="confirmDelete(item.id)" positive-text="确认" negative-text="取消">
               <template #trigger>
                 <n-button type="error" size="small" :disabled="item.disabled">删除</n-button>
               </template>
@@ -209,11 +203,11 @@ const editNews = () => {
           </li>
         </ul>
       </TransitionGroup>
-      <n-divider title-placement="mid" style="color: #666;font-size: 13px" v-show="list.length !== 0">
+      <n-divider title-placement="mid" style="color: #666; font-size: 13px" v-show="list.length !== 0">
         {{ list.length }}条数据
       </n-divider>
       <div class="pagination">
-        <n-pagination v-model:page="page" :page-count="1"/>
+        <n-pagination v-model:page="page" :page-count="1" />
       </div>
     </div>
   </div>
@@ -269,7 +263,6 @@ const editNews = () => {
 .tableTitle > li {
   flex: 1;
   text-align: center;
-
 }
 
 .tableTitle {
@@ -295,6 +288,5 @@ const editNews = () => {
 .container {
   height: calc(100vh - 80px);
   padding: 20px;
-
 }
 </style>

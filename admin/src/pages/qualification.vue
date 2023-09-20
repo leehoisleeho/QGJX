@@ -1,8 +1,8 @@
 <script setup>
-import {onMounted, ref} from 'vue'
-import {NButton, NDivider, NPagination, NPopconfirm, NDrawer, NDrawerContent, NInput, useMessage} from 'naive-ui'
-import ImgOne from "../components/ImgOne.vue";
-import Editor from "../components/Editor.vue"
+import { onMounted, ref } from 'vue'
+import { NButton, NDivider, NPagination, NPopconfirm, NDrawer, NDrawerContent, NInput, useMessage } from 'naive-ui'
+import ImgOne from '../components/ImgOne.vue'
+import Editor from '../components/Editor.vue'
 import api from '/API/api.js'
 import verifyData from '/src/util/verifyData.js'
 import timestamp from '/src/util/date.js'
@@ -19,17 +19,17 @@ onMounted(() => {
 /**
  * 抽屉
  */
-const active = ref(false);
-const placement = ref("right");
+const active = ref(false)
+const placement = ref('right')
 // 打开抽屉
 const activate = (place) => {
-  active.value = true;
+  active.value = true
   //重置
   isEdit.value = false
   img.value = ''
   title.value = ''
-  placement.value = place;
-};
+  placement.value = place
+}
 // 确认抽屉
 const add = () => {
   if (isEdit.value) {
@@ -54,59 +54,62 @@ const add = () => {
 }
 // 取消抽屉
 const Oncancel = () => {
-  active.value = false;
+  active.value = false
 }
 // 图片上传成功的自定义事件
 const onSuccess = (val) => {
   img.value = val
 }
 // 新增
-const addQualification = ()=>{
-  api.addQualification({
-    title:title.value,
-    img:img.value,
-    createtime: timestamp()
-  }).then(res=>{
-    console.log(123)
-    message.success('上传成功')
-    getQualification()
-    active.value = false
-  })
+const addQualification = () => {
+  api
+    .addQualification({
+      title: title.value,
+      img: img.value,
+      createtime: timestamp(),
+    })
+    .then((res) => {
+      console.log(res)
+      message.success('上传成功')
+      getQualification()
+      active.value = false
+    })
 }
 // 删除
 const confirmDelete = (id) => {
-  api.delQualification({id}).then(res=>{
+  api.delQualification({ id }).then((res) => {
     getQualification()
   })
 }
 // 查看
-const getQualification = ()=>{
-  api.getQualification().then(res=>{
+const getQualification = () => {
+  api.getQualification().then((res) => {
     list.value = res.data
   })
 }
 // 编辑
 const isEdit = ref(false)
-const id = ref("")
-const editBut = (item)=>{
+const id = ref('')
+const editBut = (item) => {
   isEdit.value = true
   id.value = item.id
   title.value = item.title
   img.value = item.img
   active.value = true
 }
-const editQualification = ()=>{
-  api.editQualification({
-    id: id.value,
-    title: title.value,
-    img: img.value,
-  }).then(res => {
-    isEdit.value = false
-    active.value = false
-    getQualification()
-  })
+const editQualification = () => {
+  api
+    .editQualification({
+      id: id.value,
+      title: title.value,
+      img: img.value,
+    })
+    .then((res) => {
+      isEdit.value = false
+      active.value = false
+      getQualification()
+    })
 }
-
 </script>
 
 <template>
@@ -114,16 +117,12 @@ const editQualification = ()=>{
     <n-drawer v-model:show="active" :width="800" :placement="placement">
       <n-drawer-content title="添加资质">
         <div class="formBox">
-          <div class="title">
-            资质名称
-          </div>
-          <n-input v-model:value="title" type="text" placeholder="请输入资质名称"/>
+          <div class="title">资质名称</div>
+          <n-input v-model:value="title" type="text" placeholder="请输入资质名称" />
         </div>
         <div class="formBox">
-          <div class="title">
-            上传资质图片
-          </div>
-          <ImgOne v-model:src="img" :imgSize="[100,140]"></ImgOne>
+          <div class="title">上传资质图片</div>
+          <ImgOne v-model:src="img" :imgSize="[100, 140]"></ImgOne>
         </div>
         <template #footer>
           <n-button @click="add" type="primary">确认</n-button>
@@ -143,7 +142,7 @@ const editQualification = ()=>{
         <li>创建时间</li>
         <li>操作</li>
       </ul>
-      <n-divider title-placement="mid" style="color: #999;font-size: 13px" v-show="list.length === 0">
+      <n-divider title-placement="mid" style="color: #999; font-size: 13px" v-show="list.length === 0">
         没有数据
       </n-divider>
       <TransitionGroup name="list" tag="div">
@@ -151,17 +150,13 @@ const editQualification = ()=>{
           <li>{{ item.id }}</li>
           <li>{{ item.title }}</li>
           <li>
-            <img :src="item.img" alt="">
+            <img :src="item.img" alt="" />
           </li>
-          <li>{{ item.createtime }}</li>
           <li>{{ item.views }}</li>
+          <li>{{ item.createtime }}</li>
           <li>
             <n-button type="info" size="small" @click="editBut(item)">查看</n-button>
-            <n-popconfirm
-                @positive-click="confirmDelete(item.id)"
-                positive-text="确认"
-                negative-text="取消"
-            >
+            <n-popconfirm @positive-click="confirmDelete(item.id)" positive-text="确认" negative-text="取消">
               <template #trigger>
                 <n-button type="error" size="small">删除</n-button>
               </template>
@@ -170,18 +165,18 @@ const editQualification = ()=>{
           </li>
         </ul>
       </TransitionGroup>
-      <n-divider title-placement="mid" style="color: #666;font-size: 13px" v-show="list.length !== 0">
+      <n-divider title-placement="mid" style="color: #666; font-size: 13px" v-show="list.length !== 0">
         {{ list.length }}条数据
       </n-divider>
       <div class="pagination">
-        <n-pagination v-model:page="page" :page-count="1"/>
+        <n-pagination v-model:page="page" :page-count="1" />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.tableInfo>li>img{
+.tableInfo > li > img {
   width: 100px;
   height: 140px;
   border-radius: 5px;
@@ -236,7 +231,6 @@ const editQualification = ()=>{
 .tableTitle > li {
   flex: 1;
   text-align: center;
-
 }
 
 .tableTitle {
@@ -262,6 +256,5 @@ const editQualification = ()=>{
 .container {
   height: calc(100vh - 80px);
   padding: 20px;
-
 }
 </style>

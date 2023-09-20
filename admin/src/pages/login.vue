@@ -41,7 +41,7 @@ const toIndex = () => {
     <div class="loginBox">
       <div class="loginBox_1">
         <div class="imgBox">
-          <img src="../assets/img/logo.png" />
+          <img src="../assets/img/qglogo.png" />
         </div>
         <h1>{{ config.system_name }}</h1>
         <div class="version">

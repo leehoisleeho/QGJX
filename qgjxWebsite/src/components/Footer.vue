@@ -1,24 +1,24 @@
 <script setup>
 import api from "../../API/api.js";
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 
-const about = ref('')
+const about = ref("");
 onMounted(() => {
-  api.getAbout().then(res => {
-    about.value = res.data[0]
-  })
-})
+  api.getAbout().then((res) => {
+    about.value = res.data[0];
+  });
+});
 const open_map = () => {
-  const coordinate = about.value.coordinate.split(',')
-  console.log(coordinate)
+  const coordinate = about.value.coordinate.split(",");
+  console.log(coordinate);
   // 103.389729,23.357675
   let latitude = coordinate[0]; // 纬度
   let longitude = coordinate[1]; // 经度
   // 构建腾讯地图的URL
-  let mapUrl = `https://apis.map.qq.com/uri/v1/marker?marker=coord:${longitude},${latitude};title:我的位置;`
+  let mapUrl = `https://apis.map.qq.com/uri/v1/marker?marker=coord:${longitude},${latitude};title:我的位置;`;
   // 使用JavaScript打开新窗口或标签页
-  window.open(mapUrl, '_blank');
-}
+  window.open(mapUrl, "_blank");
+};
 </script>
 
 <template>
@@ -44,15 +44,15 @@ const open_map = () => {
       <div class="right">
         <div class="mapBox">
           <div class="mapBox_1" @click="open_map">
-            <img src="/src/assets/images/mapIcon.jpg">
+            <img src="/src/assets/images/mapIcon.jpg" />
             <p>点击查看位置</p>
           </div>
           <div class="mapBox_1">
-            <img :src="about.src_map">
+            <img :src="about.src_map" />
             <p>扫描查看位置</p>
           </div>
           <div class="mapBox_1" @click="open_map">
-            <img :src="about.src_wx">
+            <img :src="about.src_wx" />
             <p>扫描联系我们</p>
           </div>
         </div>
@@ -60,8 +60,9 @@ const open_map = () => {
     </div>
     <div class="websiteInfo">
       Copyright © 2001-2023 桥刚机械装备制造(红河)有限公司 版权所有
-      滇ICP备XXXXXXXX号
-      滇公网安备XXXXXXXXXXXXXX号
+      <a href="https://beian.miit.gov.cn/#/Integrated/index"
+        >滇ICP备2022001513号-1</a
+      >
     </div>
   </div>
 </template>

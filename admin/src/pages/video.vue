@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref} from 'vue'
+import { onMounted, ref } from 'vue'
 import {
   NButton,
   NDivider,
@@ -9,14 +9,14 @@ import {
   NDrawerContent,
   NInput,
   useMessage,
-  NSwitch
+  NSwitch,
 } from 'naive-ui'
-import UploadVideo from "../components/UploadVideo.vue";
+import UploadVideo from '../components/UploadVideo.vue'
 import api from '/API/api.js'
 import verifyData from '/src/util/verifyData.js'
 import timestamp from '/src/util/date.js'
 import 'vue3-video-play/dist/style.css'
-import {videoPlay} from 'vue3-video-play'
+import { videoPlay } from 'vue3-video-play'
 
 const message = useMessage()
 const title = ref('')
@@ -30,17 +30,17 @@ onMounted(() => {
 /**
  * 抽屉
  */
-const active = ref(false);
-const placement = ref("right");
+const active = ref(false)
+const placement = ref('right')
 // 打开抽屉
 const activate = (place) => {
-  active.value = true;
+  active.value = true
   //重置
   isEdit.value = false
   src.value = ''
   title.value = ''
-  placement.value = place;
-};
+  placement.value = place
+}
 // 确认抽屉
 const add = () => {
   if (isEdit.value) {
@@ -65,7 +65,7 @@ const add = () => {
 }
 // 取消抽屉
 const Oncancel = () => {
-  active.value = false;
+  active.value = false
 }
 // 图片上传成功的自定义事件
 const videoChange = (val) => {
@@ -73,40 +73,43 @@ const videoChange = (val) => {
 }
 // 新增
 const addVideo = () => {
-  api.addVideo({
-    title: title.value,
-    src: src.value,
-    createtime: timestamp()
-  }).then(res => {
-    console.log(123)
-    message.success('上传成功')
-    getVideo()
-    active.value = false
-  })
+  console.log(timestamp())
+  api
+    .addVideo({
+      title: title.value,
+      src: src.value,
+      createtime: timestamp(),
+    })
+    .then((res) => {
+      console.log(res)
+      message.success('上传成功')
+      getVideo()
+      active.value = false
+    })
 }
 // 删除
 const confirmDelete = (id) => {
-  api.delVideo({id}).then(res => {
+  api.delVideo({ id }).then((res) => {
     getVideo()
   })
 }
 // 查看
 const getVideo = () => {
-  api.getVideo().then(res => {
+  api.getVideo().then((res) => {
     let arr = res.data
     // 判断是否有isindex为1 的视频
-    let isindex = arr.filter(item => {
+    let isindex = arr.filter((item) => {
       return item.isindex === 1
     })
     if (isindex.length === 0) {
       // 没有主页显示视频的时候
-      arr.forEach(item => {
+      arr.forEach((item) => {
         item.disabled = false
         item.btndisabled = false
       })
     } else {
       // 有主页实现视频的时候
-      arr.forEach(item => {
+      arr.forEach((item) => {
         if (item.isindex === 1) {
           item.disabled = false
           item.btndisabled = true
@@ -121,7 +124,7 @@ const getVideo = () => {
 }
 // 编辑
 const isEdit = ref(false)
-const id = ref("")
+const id = ref('')
 const editBut = (item) => {
   isEdit.value = true
   id.value = item.id
@@ -130,36 +133,42 @@ const editBut = (item) => {
   active.value = true
 }
 const editVideo = () => {
-  api.editVideo({
-    id: id.value,
-    title: title.value,
-    src: src.value,
-  }).then(res => {
-    isEdit.value = false
-    active.value = false
-    getVideo()
-  })
+  api
+    .editVideo({
+      id: id.value,
+      title: title.value,
+      src: src.value,
+    })
+    .then((res) => {
+      isEdit.value = false
+      active.value = false
+      getVideo()
+    })
 }
 // 开关状态
 const handleUpdateValue = (item) => {
   let isIndexVal = item.isindex
   // 如果是1
   if (isIndexVal === 1) {
-    api.editVideo({
-      id: item.id,
-      isindex: 0
-    }).then(res => {
-      console.log(res)
-      getVideo()
-    })
+    api
+      .editVideo({
+        id: item.id,
+        isindex: 0,
+      })
+      .then((res) => {
+        console.log(res)
+        getVideo()
+      })
   } else if (isIndexVal === 0) {
-    api.editVideo({
-      id: item.id,
-      isindex: 1
-    }).then(res => {
-      console.log(res)
-      getVideo()
-    })
+    api
+      .editVideo({
+        id: item.id,
+        isindex: 1,
+      })
+      .then((res) => {
+        console.log(res)
+        getVideo()
+      })
   }
 }
 </script>
@@ -169,17 +178,13 @@ const handleUpdateValue = (item) => {
     <n-drawer v-model:show="active" :width="800" :placement="placement">
       <n-drawer-content title="添加视频">
         <div class="formBox">
-          <div class="title">
-            视频名称
-          </div>
-          <n-input v-model:value="title" type="text" placeholder="请输入视频标题"/>
+          <div class="title">视频名称</div>
+          <n-input v-model:value="title" type="text" placeholder="请输入视频标题" />
         </div>
         <div class="formBox">
-          <div class="title">
-            上传视频资源
-          </div>
-          <UploadVideo style="margin-bottom:20px" :src='src' @change="videoChange"></UploadVideo>
-          <videoPlay :autoPlay='false' width="800" preload='meta' :src="src" v-show="src !==''"></videoPlay>
+          <div class="title">上传视频资源</div>
+          <UploadVideo style="margin-bottom: 20px" :src="src" @change="videoChange"></UploadVideo>
+          <videoPlay :autoPlay="false" width="800" preload="meta" :src="src" v-show="src !== ''"></videoPlay>
         </div>
         <template #footer>
           <n-button @click="add" type="primary">确认</n-button>
@@ -199,7 +204,7 @@ const handleUpdateValue = (item) => {
         <li>主页显示</li>
         <li>操作</li>
       </ul>
-      <n-divider title-placement="mid" style="color: #999;font-size: 13px" v-show="list.length === 0">
+      <n-divider title-placement="mid" style="color: #999; font-size: 13px" v-show="list.length === 0">
         没有数据
       </n-divider>
       <TransitionGroup name="list" tag="div">
@@ -210,18 +215,13 @@ const handleUpdateValue = (item) => {
           <li>{{ item.createtime }}</li>
           <li>
             <n-switch
-                :disabled="item.disabled"
-                @update:value="handleUpdateValue(item)"
-                :default-value="item.isindex===1"
-            />
+              :disabled="item.disabled"
+              @update:value="handleUpdateValue(item)"
+              :default-value="item.isindex === 1" />
           </li>
           <li>
             <n-button type="info" size="small" @click="editBut(item)">查看</n-button>
-            <n-popconfirm
-                @positive-click="confirmDelete(item.id)"
-                positive-text="确认"
-                negative-text="取消"
-            >
+            <n-popconfirm @positive-click="confirmDelete(item.id)" positive-text="确认" negative-text="取消">
               <template #trigger>
                 <n-button type="error" size="small" :disabled="item.btndisabled">删除</n-button>
               </template>
@@ -230,11 +230,11 @@ const handleUpdateValue = (item) => {
           </li>
         </ul>
       </TransitionGroup>
-      <n-divider title-placement="mid" style="color: #666;font-size: 13px" v-show="list.length !== 0">
+      <n-divider title-placement="mid" style="color: #666; font-size: 13px" v-show="list.length !== 0">
         {{ list.length }}条数据
       </n-divider>
       <div class="pagination">
-        <n-pagination v-model:page="page" :page-count="1"/>
+        <n-pagination v-model:page="page" :page-count="1" />
       </div>
     </div>
   </div>
@@ -297,7 +297,6 @@ const handleUpdateValue = (item) => {
 .tableTitle > li {
   flex: 1;
   text-align: center;
-
 }
 
 .tableTitle {
@@ -323,6 +322,5 @@ const handleUpdateValue = (item) => {
 .container {
   height: calc(100vh - 80px);
   padding: 20px;
-
 }
 </style>

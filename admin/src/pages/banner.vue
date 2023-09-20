@@ -1,21 +1,10 @@
 <script setup>
-import {onMounted, ref} from 'vue'
-import {
-  NButton,
-  NDivider,
-  NPagination,
-  NPopconfirm,
-  NDrawer,
-  NDrawerContent,
-  NSelect,
-  NInput,
-  useMessage,
-  NSwitch
-} from 'naive-ui'
+import { onMounted, ref } from 'vue'
+import { NButton, NDivider, NPagination, NPopconfirm, NDrawer, NDrawerContent, NSelect, useMessage } from 'naive-ui'
 import api from '/API/api.js'
 import verifyData from '/src/util/verifyData.js'
 import timestamp from '/src/util/date.js'
-import ImgOne from "../components/ImgOne.vue";
+import ImgOne from '../components/ImgOne.vue'
 
 const message = useMessage()
 // 封面的img
@@ -34,17 +23,17 @@ onMounted(() => {
 /**
  * 抽屉
  */
-const active = ref(false);
-const placement = ref("right");
+const active = ref(false)
+const placement = ref('right')
 // 打开抽屉
 const activate = (place) => {
-  active.value = true;
+  active.value = true
   //重置
   isEdit.value = false
   src.value = ''
   title.value = ''
-  placement.value = place;
-};
+  placement.value = place
+}
 // 确认抽屉
 const add = () => {
   if (isEdit.value) {
@@ -69,47 +58,53 @@ const add = () => {
 }
 // 取消抽屉
 const Oncancel = () => {
-  active.value = false;
+  active.value = false
 }
 // 新增
 const addBanner = () => {
-  api.addBanner({
-    newsid: newsid.value,
-    title: title.value,
-    img: src.value,
-    createtime: timestamp()
-  }).then(res => {
-    api.editNews({
-      id: newsid.value,
-      isbanner: 1
-    }).then(res => {
-      message.success('上传成功')
-      getBanner()
-      active.value = false
+  api
+    .addBanner({
+      newsid: newsid.value,
+      title: title.value,
+      img: src.value,
+      createtime: timestamp(),
     })
-  })
+    .then((res) => {
+      api
+        .editNews({
+          id: newsid.value,
+          isbanner: 1,
+        })
+        .then((res) => {
+          message.success('上传成功')
+          getBanner()
+          active.value = false
+        })
+    })
 }
 // 删除
 const confirmDelete = (item) => {
-  api.delBanner({id: item.id}).then(res => {
-    api.editNews({
-      id: item.newsid,
-      isbanner: 0
-    }).then(res => {
-      getBanner()
-    })
+  api.delBanner({ id: item.id }).then((res) => {
+    api
+      .editNews({
+        id: item.newsid,
+        isbanner: 0,
+      })
+      .then((res) => {
+        getBanner()
+      })
   })
 }
 // 查看
 const getBanner = () => {
-  api.getBanner().then(res => {
+  api.getBanner().then((res) => {
     let arr = res.data
     list.value = arr
   })
 }
 // 编辑
 const isEdit = ref(false)
-const id = ref("")
+const id = ref('')
 const editBut = (item) => {
   isEdit.value = true
   id.value = item.id
@@ -118,15 +113,17 @@ const editBut = (item) => {
   active.value = true
 }
 const editVideo = () => {
-  api.editVideo({
-    id: id.value,
-    title: title.value,
-    src: src.value,
-  }).then(res => {
-    isEdit.value = false
-    active.value = false
-    getBanner()
-  })
+  api
+    .editVideo({
+      id: id.value,
+      title: title.value,
+      src: src.value,
+    })
+    .then((res) => {
+      isEdit.value = false
+      active.value = false
+      getBanner()
+    })
 }
 // 选择器
 const newsid = ref('')
@@ -134,7 +131,7 @@ const title = ref('')
 // 选择新闻
 const onChange = (e) => {
   newsid.value = e
-  newsList.value.forEach(item => {
+  newsList.value.forEach((item) => {
     if (item.id === e) {
       title.value = item.title
     }
@@ -142,23 +139,23 @@ const onChange = (e) => {
 }
 // 打开选择器
 const onShow = () => {
-// 获取新闻列表 赋值给选择器的options
-  api.getNews().then(res => {
+  // 获取新闻列表 赋值给选择器的options
+  api.getNews().then((res) => {
     newsList.value = res.data
     let arr = []
-    res.data.forEach(item => {
+    res.data.forEach((item) => {
       if (item.isbanner === 1) {
         arr.push({
           label: item.title,
           value: item.id,
-          disabled: true
+          disabled: true,
         })
         return
       }
       arr.push({
         label: item.title,
         value: item.id,
-        disabled: false
+        disabled: false,
       })
     })
     options.value = arr
@@ -171,16 +168,12 @@ const onShow = () => {
     <n-drawer v-model:show="active" :width="800" :placement="placement">
       <n-drawer-content title="添加轮播图">
         <div class="formBox">
-          <div class="title">
-            选择新闻
-          </div>
-          <n-select v-model:value="value" :options="options" @update:value="onChange" @update:show="onShow"/>
+          <div class="title">选择新闻</div>
+          <n-select v-model:value="value" :options="options" @update:value="onChange" @update:show="onShow" />
         </div>
         <div class="formBox">
-          <div class="title">
-            上传轮播图封面
-          </div>
-          <ImgOne v-model:src="src" :imgSize="[400,224]"></ImgOne>
+          <div class="title">上传轮播图封面</div>
+          <ImgOne v-model:src="src" :imgSize="[400, 224]"></ImgOne>
         </div>
         <template #footer>
           <n-button @click="add" type="primary">确认</n-button>
@@ -200,7 +193,7 @@ const onShow = () => {
         <li>创建时间</li>
         <li>操作</li>
       </ul>
-      <n-divider title-placement="mid" style="color: #999;font-size: 13px" v-show="list.length === 0">
+      <n-divider title-placement="mid" style="color: #999; font-size: 13px" v-show="list.length === 0">
         没有数据
       </n-divider>
       <TransitionGroup name="list" tag="div">
@@ -209,17 +202,13 @@ const onShow = () => {
           <li>{{ item.newsid }}</li>
           <li>{{ item.title }}</li>
           <li>
-            <img :src="item.img" alt="">
+            <img :src="item.img" alt="" />
           </li>
           <li>
             {{ item.createtime }}
           </li>
           <li>
-            <n-popconfirm
-                @positive-click="confirmDelete(item)"
-                positive-text="确认"
-                negative-text="取消"
-            >
+            <n-popconfirm @positive-click="confirmDelete(item)" positive-text="确认" negative-text="取消">
               <template #trigger>
                 <n-button type="error" size="small" :disabled="item.btndisabled">删除</n-button>
               </template>
@@ -228,11 +217,11 @@ const onShow = () => {
           </li>
         </ul>
       </TransitionGroup>
-      <n-divider title-placement="mid" style="color: #666;font-size: 13px" v-show="list.length !== 0">
+      <n-divider title-placement="mid" style="color: #666; font-size: 13px" v-show="list.length !== 0">
         {{ list.length }}条数据
       </n-divider>
       <div class="pagination">
-        <n-pagination v-model:page="page" :page-count="1"/>
+        <n-pagination v-model:page="page" :page-count="1" />
       </div>
     </div>
   </div>
@@ -295,7 +284,6 @@ const onShow = () => {
 .tableTitle > li {
   flex: 1;
   text-align: center;
-
 }
 
 .tableTitle {
@@ -321,6 +309,5 @@ const onShow = () => {
 .container {
   height: calc(100vh - 80px);
   padding: 20px;
-
 }
 </style>

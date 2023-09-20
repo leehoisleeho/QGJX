@@ -50,7 +50,7 @@ const toIndex = () => {
     <div class="wrapper_1">
       <div class="logo" @click="toIndex">
         <!--        <img src="../assets/images/logo.png">-->
-        <h1>桥刚机械装备制造(红河)有限公司</h1>
+        <img src="../assets/images/qgwebsite.png" />
       </div>
       <div class="nav">
         <ul class="nav_list">
@@ -99,7 +99,6 @@ const toIndex = () => {
   align-items: center;
 }
 .logo > img {
-  width: 40px;
   height: 40px;
   margin-right: 10px;
 }

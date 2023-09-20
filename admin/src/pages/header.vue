@@ -1,25 +1,25 @@
 <script setup>
-import {NDropdown,NIcon} from 'naive-ui'
+import { NDropdown, NIcon } from 'naive-ui'
 import config from '../config.js'
-import {useRouter} from "vue-router";
-const router = useRouter();
-const handleSelect = (e)=>{
-  if (e===3){
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const handleSelect = (e) => {
+  if (e === 3) {
     sessionStorage.clear()
-    router.push("/")
+    router.push('/')
   }
 }
 const options = [
   {
-    label: "用户资料",
+    label: '用户资料',
     key: 1,
   },
   {
-    label: "修改密码",
+    label: '修改密码',
     key: 2,
   },
   {
-    label: "退出",
+    label: '退出',
     key: 3,
   },
 ]
@@ -28,32 +28,31 @@ const options = [
 <template>
   <div class="container">
     <div class="logBox">
-      <img src="../assets/img/logo.png">
-      <h1>{{config.system_name}}</h1>
+      <img src="../assets/img/qglogo.png" />
     </div>
     <div class="operateBox">
       <n-dropdown trigger="hover" :options="options" @select="handleSelect">
         <div class="user">
-          <img src="../assets/img/defaultUser.png">
+          <img src="../assets/img/defaultUser.png" />
         </div>
       </n-dropdown>
       <h2>
-        <img src="../assets/img/versionIcon.png">
-        <span>版本 {{config.version}}</span>
+        <img src="../assets/img/versionIcon.png" />
+        <span>版本 {{ config.version }}</span>
       </h2>
     </div>
   </div>
 </template>
 
 <style scoped>
-.user>img{
+.user > img {
   width: 100%;
   cursor: pointer;
 }
-.operateBox{
+.operateBox {
   display: flex;
 }
-.user{
+.user {
   margin-right: 20px;
   border-radius: 50%;
   overflow: hidden;
@@ -65,11 +64,11 @@ const options = [
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
-.operateBox>h2>img{
+.operateBox > h2 > img {
   width: 22px;
   margin-right: 5px;
 }
-.operateBox>h2{
+.operateBox > h2 {
   font-weight: 400;
   font-size: 15px;
   color: #666666;
@@ -77,7 +76,7 @@ const options = [
   align-items: center;
   justify-content: center;
 }
-.logBox>h1{
+.logBox > h1 {
   font-size: 19px;
   margin-left: 10px;
   color: #333;
